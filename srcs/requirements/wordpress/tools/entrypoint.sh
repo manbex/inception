@@ -4,17 +4,17 @@ if [ -d "/var/www/wordpress" ]
 then
 	echo wordpress already installed
 else
-	curl -O https://wordpress.org/latest.tar.gz
-	tar -xf latest.tar.gz
-	rm latest.tar.gz
-	mv wordpress /var/www/
-	chmod -R 755 /var/www/wordpress
+	mkdir -p /var/www/wordpress
+	cd /var/www/wordpress
+	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+	chmod +x wp-cli.phar
+	mv wp-cli.phar /usr/local/bin/wp
 
-	cp /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php
-	sed -i "s/username_here/$MYSQL_USER/g" /var/www/wordpress/wp-config.php
-	sed -i "s/password_here/$MYSQL_PASSWORD/g" /var/www/wordpress/wp-config.php
-	sed -i "s/localhost/$MYSQL_HOSTNAME/g" /var/www/wordpress/wp-config.php
-	sed -i "s/database_name_here/$MYSQL_DATABASE/g" /var/www/wordpress/wp-config.php
+	wp core download --allow-root
+	wp config create --dbname=$MYSQL_DATABASE --dbuser=$MYSQL_USER --dbpass=$MYSQL_PASSWORD --dbhost=$MYSQL_HOSTNAME --allow-root
+	wp core install --url=$WP_URL --title="$WP_TITLE" --admin_user=$WP_ADMIN --admin_password=$WP_ADMIN_PASSWORD --admin_email=$WP_ADMIN_EMAIL --skip-email --allow-root
+	wp user create $WP_USER $WP_EMAIL --user_pass=$WP_PASSWORD --allow-root
+
 fi
 
 exec "$@"

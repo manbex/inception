@@ -1,6 +1,8 @@
 all: run
 
 run:
+	@mkdir -p /home/mbenicho/data/wordpress_volume
+	@mkdir -p /home/mbenicho/data/database_volume
 	@docker-compose -f ./srcs/docker-compose.yml up --build
 
 stop:
@@ -12,7 +14,7 @@ clean: stop
 	@docker system prune -af
 
 vclean: stop
-	@rm -rf /home/mbenicho/data/wordpress_volume/*
-	@rm -rf /home/mbenicho/data/database_volume/*
+	@rm -rf /home/mbenicho/data/wordpress_volume
+	@rm -rf /home/mbenicho/data/database_volume
 
 fclean: clean vclean

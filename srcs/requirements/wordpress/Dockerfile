@@ -2,7 +2,7 @@ FROM debian:bullseye
 
 RUN apt update -y
 RUN apt upgrade -y
-RUN apt install netcat curl php-fpm php-cli php-mysql php-curl php-gd php-intl -y
+RUN apt install curl php-fpm php-cli php-mysql php-curl php-gd php-intl -y
 
 RUN mkdir -p /var/www
 RUN mkdir -p /run/php
